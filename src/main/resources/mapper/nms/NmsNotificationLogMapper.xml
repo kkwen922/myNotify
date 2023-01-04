@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="my.notify.nms.mapper.NmsNotificationLogMapper">
+
+    <!-- 通用查詢mapping结果 -->
+    <resultMap id="BaseResultMap" type="my.notify.nms.model.NmsNotificationLog">
+        <id column="id" property="id" />
+        <result column="create_time" property="createTime" />
+        <result column="response_time" property="responseTime" />
+        <result column="name" property="name" />
+        <result column="context" property="context" />
+        <result column="status" property="status" />
+        <result column="send_to" property="sendTo" />
+        <result column="category_id" property="categoryId" />
+    </resultMap>
+
+    <select id="getLogListKK" resultType="my.notify.nms.model.NmsNotificationLog">
+        SELECT
+            c.id,
+            oo.name,
+            c.context,
+            c.status,
+            c.create_time,
+            c.response_time,
+            c.send_to,
+            c.category_id
+        FROM nms_notification_log c left outer join  nms_notification_category oo on c.category_id = oo.id
+        ORDER BY c.create_time DESC
+    </select>
+
+</mapper>

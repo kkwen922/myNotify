@@ -1,4 +1,4 @@
-package my.notify.utils;
+package my.notify.utils.teamplus;
 
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 

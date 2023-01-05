@@ -1,4 +1,4 @@
-package my.notify.utils;
+package my.notify.utils.xsms;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -38,16 +38,29 @@ public class XsmsUtil {
         String reqUrl = smsUrl + "?MDN=" + xsmsMdn + "&UID=" + smsUid + "&UPASS=" + smsPwd;
         log.info("sms url: {}"+reqUrl);
 
+
+
         String requestBody = "<Request><Subject>事件資訊:" + "</Subject><Retry>Y</Retry>" +
                 "<AutoSplit>Y</AutoSplit><Callback>" + xsmsCall + "</Callback>" +
                 "<Message>" + message + "</Message>" + "<MDNList>";
 
 
+        StringBuilder stringBuilder = new StringBuilder();
         for (String xmdn : cArray) {
+            MdnBean mdnBean = new MdnBean();
+//            mdnBean.setMSISDN(xmdn);
             requestBody = requestBody + "<MSISDN>" + xmdn + "</MSISDN>";
         }
 
         requestBody = requestBody + "</MDNList></Request>";
+        Request res = new Request();
+        res.setSubject("事件資訊:");
+//        res.setRetry("Y");
+//        res.setAutoSplit("Y");
+//        res.setCallback(xsmsCall);
+//        res.setMessage(message);
+
+        log.info("KK=>"+res.toString());
 
         log.info("XML==>" + requestBody);
 

@@ -36,18 +36,18 @@ management:
 teamplus:
   flag: 1  # 0:-> Off, 1:-> On
   name: teamPlus
-  url: https://eim.gtcloud.net.tw/API/SuperHubService.ashx?ask=
-  ask: broadcastMessage
-  ch_sn: 14
-  key: 525950c817004f569204b90ba8dc250a
+  url: https://eim.net.tw/API/SuperHubService.ashx?ask=
+  ask: 
+  ch_sn: 
+  key: 
   type: 1
 
 xsms:
   flag: 0  # 0:-> Off, 1:->On
   name: SMS
-  url: http://xsms.aptg.com.tw/XSMSAP/api/APIRTFastHttpRequest
-  mdn: 0906180640
-  uid: bb_test
+  url: http://xsms.aptg.com.tw/api/APIRTFastHttpRequest
+  mdn: 
+  uid: 
   pwd: 123456
   call: 0906180640
 
@@ -56,6 +56,6 @@ mail:
   port: 587
   authEnabled: true
   starttlsEnabled: true
-  userAdress: aptg.alert@gmail.com
-  userPwd: aptgalert123
+  userAdress: 
+  userPwd: 
   useDisplayname: Notification Mail

@@ -1,5 +1,6 @@
 package my.notify.schedule;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import my.notify.nms.model.SendMessageParam;
 import my.notify.nms.service.NmsNotificationLogCategoryService;
@@ -29,12 +30,16 @@ public class ReceiveMessageListener {
      * @param sendMessageParam
      */
     @RabbitListener(queues = {"teamplus.queue"})
-    public void receive(SendMessageParam sendMessageParam) {
+    public void receive(SendMessageParam sendMessageParam) throws JsonProcessingException {
 
         log.info("receive snsType: {} ", sendMessageParam.getSnsType());
 
         if(sendMessageParam.getSnsType()==1) {
             sendAlertScheduleTask.sendteamplusTask(sendMessageParam);
+        }
+
+        if(sendMessageParam.getSnsType()==2) {
+            sendAlertScheduleTask.sendxsmsTask(sendMessageParam);
         }
 
     }

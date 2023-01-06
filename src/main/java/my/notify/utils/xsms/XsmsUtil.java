@@ -1,5 +1,8 @@
 package my.notify.utils.xsms;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -8,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
+import java.util.ArrayList;
 
 /**
  * @author : kevin Chang
@@ -29,48 +34,43 @@ public class XsmsUtil {
      * @param message
      * @return
      */
-    public boolean send2Xsms(String bno,String smsUrl,String smsMdn,String smsUid,String smsPwd,String smsCall,String message){
+    public boolean send2Xsms(String bno,String smsUrl,String smsMdn,String smsUid,String smsPwd,String smsCall,String message) throws JsonProcessingException {
         boolean result =false;
 
         String[] cArray = bno.split(",");
-        String xsmsMdn = "0906180640";
-        String xsmsCall ="0906180640";
-        String reqUrl = smsUrl + "?MDN=" + xsmsMdn + "&UID=" + smsUid + "&UPASS=" + smsPwd;
+//        String xsmsMdn = "0906180640";
+//        String xsmsCall ="0906180640";
+        String reqUrl = smsUrl + "?MDN=" + smsMdn + "&UID=" + smsUid + "&UPASS=" + smsPwd;
         log.info("sms url: {}"+reqUrl);
 
-
-
-        String requestBody = "<Request><Subject>事件資訊:" + "</Subject><Retry>Y</Retry>" +
-                "<AutoSplit>Y</AutoSplit><Callback>" + xsmsCall + "</Callback>" +
-                "<Message>" + message + "</Message>" + "<MDNList>";
-
-
-        StringBuilder stringBuilder = new StringBuilder();
+        ArrayList<String> list = new ArrayList<String>();
         for (String xmdn : cArray) {
-            MdnBean mdnBean = new MdnBean();
-//            mdnBean.setMSISDN(xmdn);
-            requestBody = requestBody + "<MSISDN>" + xmdn + "</MSISDN>";
+            list.add(xmdn);
         }
+        MdnBean mdnBean = new MdnBean();
+        mdnBean.setMSISDN(list);
 
-        requestBody = requestBody + "</MDNList></Request>";
-        Request res = new Request();
-        res.setSubject("事件資訊:");
-//        res.setRetry("Y");
-//        res.setAutoSplit("Y");
-//        res.setCallback(xsmsCall);
-//        res.setMessage(message);
+        XsmsBean res = new XsmsBean();
+        res.setSubject("事件資訊");
+        res.setRetry("Y");
+        res.setAutoSplit("Y");
+        res.setCallback(smsCall);
+        res.setMessage(message);
+        res.setMDNList(mdnBean);
 
-        log.info("KK=>"+res.toString());
-
-        log.info("XML==>" + requestBody);
+        XmlMapper xmlMapper = new XmlMapper();
+        xmlMapper.setDefaultUseWrapper(false);
+        xmlMapper.enable(MapperFeature.USE_STD_BEAN_NAMING);
+        String xml = xmlMapper.writeValueAsString(res);
+        log.info("===>" + xml);
 
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_XML);
 
-        reqUrl = reqUrl + "&Content=" + requestBody;
+        reqUrl = reqUrl + "&Content=" + xml;
 
-        HttpEntity<String> request = new HttpEntity<String>(requestBody, headers);
+        HttpEntity<String> request = new HttpEntity<String>(xml, headers);
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(reqUrl, request, String.class);

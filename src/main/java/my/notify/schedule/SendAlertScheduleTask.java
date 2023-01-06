@@ -1,6 +1,7 @@
 package my.notify.schedule;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import my.notify.nms.model.NmsNotificationLog;
 import my.notify.nms.model.SendMessageParam;
@@ -143,7 +144,7 @@ public class SendAlertScheduleTask {
      * Send2XSMSTask
      * @param sendMessageParam
      */
-    public void sendxsmsTask(SendMessageParam sendMessageParam) {
+    public void sendxsmsTask(SendMessageParam sendMessageParam) throws JsonProcessingException {
 
         SnsCategory snsType = SnsCategory.SMS;
 

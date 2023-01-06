@@ -14,7 +14,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties({TeamplusProperties.class, XsmsProperties.class, MailProperties.class})
 public class MyNotifyApplication {
 
-
     public static void main(String[] args) {
         SpringApplication.run(MyNotifyApplication.class, args);
     }
